@@ -2,7 +2,7 @@ import { error } from "console";
 import Swal from "sweetalert2";
 
 const config = {
-  apiUrl: "http://localhost:3001",
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   tokenKey: "token_bun_service",
   
   confirmDialog: () => {
