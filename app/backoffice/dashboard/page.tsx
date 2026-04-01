@@ -2,8 +2,7 @@
 
 import axios from "axios";
 import config from "@/app/config";
-import { use, useEffect, useState } from "react";
-import ApexCharts from "apexcharts";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 export default function Page() {
@@ -61,7 +60,8 @@ export default function Page() {
         );
     };
 
-    const renderChartIncomePerDays = (data: number[]) => {
+    const renderChartIncomePerDays = async (data: number[]) => {
+        const ApexCharts = (await import("apexcharts")).default;
         const options = {
             chart: { type: 'bar', height: 250, background: 'white' },
             series: [{ data: data }],
@@ -75,7 +75,8 @@ export default function Page() {
         chart.render();
     };
 
-    const renderChartIncomePerMonth = () => {
+    const renderChartIncomePerMonth = async () => {
+        const ApexCharts = (await import("apexcharts")).default;
         const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 10000));
 
         const options = {
@@ -99,6 +100,7 @@ export default function Page() {
         totalRepairRecordComplete: number,
         totalRepairRecordNotComplete: number
     ) => {
+        return import("apexcharts").then(({ default: ApexCharts }) => {
         const data = [totalRepairRecord, totalRepairRecordComplete, totalRepairRecordNotComplete];
         const options = {
             chart: { type: 'pie', height: 300, background: 'white' },
@@ -109,6 +111,7 @@ export default function Page() {
         const chartPie = document.getElementById('chartPie');
         const chart = new ApexCharts(chartPie, options);
         chart.render();
+        });
     }
 
     return (
