@@ -39,48 +39,13 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-### Configuration
-
-This project currently keeps its API base URL in code:
-
-- **API base URL**: `app/config.ts` → `config.apiUrl` (default: `http://localhost:3001`)
-- **Token storage key**: `app/config.ts` → `config.tokenKey`
-
-If you deploy to another environment, update `config.apiUrl` to point to your API host.
-
-### Available scripts
-
-```bash
-npm run dev     # start Next.js in dev mode
-npm run build   # production build
-npm run start   # start production server
-npm run lint    # run ESLint
-```
-
-### Project structure (high level)
+### Project structure
 
 - **`app/`**: Next.js App Router routes, layouts, and global styles
   - **`app/page.tsx`**: Login page
   - **`app/backoffice/`**: Backoffice area (layout + pages)
   - **`app/components/`**: Shared UI components (TopNav, Sidebar, Modal)
 - **`public/`**: Static assets
-
-### Contributing / best practices
-
-- **Code style**: TypeScript strict mode is enabled (`tsconfig.json`). Keep components typed and avoid `any` where possible.
-- **Linting**: Run `npm run lint` before opening a PR.
-- **Secrets**: Do not commit `.env*` files with real secrets (prefer `.env.example` if you add env vars later).
-
-### Deployment
-
-Standard Next.js deployment works (Vercel, Docker, Node server, etc.):
-
-```bash
-npm run build
-npm run start
-```
-
-Make sure `config.apiUrl` points to the correct API base URL for that environment.
 
 ### Demo Access user for login
 username: users
