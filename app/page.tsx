@@ -2,14 +2,64 @@
 
 import Swal from "sweetalert2";
 import config from "./config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isAutoLoggingIn, setIsAutoLoggingIn] = useState(false);
   const router = useRouter();
+  const isDemoAutoLoginEnabled =
+    process.env.NEXT_PUBLIC_ENABLE_DEMO_AUTO_LOGIN === "true";
+  const demoUsername = process.env.NEXT_PUBLIC_DEMO_USERNAME;
+  const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+
+  const signIn = async (signInUsername: string, signInPassword: string) => {
+    const response = await axios.post(`${config.apiUrl}/api/user/signin`, {
+      username: signInUsername,
+      password: signInPassword,
+    });
+
+    if (response.data.token !== undefined) {
+      localStorage.setItem(config.tokenKey, response.data.token);
+      localStorage.setItem("bun_service_name", response.data.user.username);
+      localStorage.setItem("bun_service_level", response.data.user.level);
+
+      router.push("/backoffice/dashboard");
+      return true;
+    }
+
+    return false;
+  };
+
+  useEffect(() => {
+    const existingToken = localStorage.getItem(config.tokenKey);
+
+    if (existingToken) {
+      router.push("/backoffice/dashboard");
+      return;
+    }
+
+    if (!isDemoAutoLoginEnabled || !demoUsername || !demoPassword) {
+      return;
+    }
+
+    const autoLoginDemo = async () => {
+      setIsAutoLoggingIn(true);
+
+      try {
+        await signIn(demoUsername, demoPassword);
+      } catch (error) {
+        console.error("Demo auto login failed", error);
+      } finally {
+        setIsAutoLoggingIn(false);
+      }
+    };
+
+    autoLoginDemo();
+  }, [demoPassword, demoUsername, isDemoAutoLoginEnabled, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,27 +82,15 @@ export default function Home() {
         return;
       }
 
-      const payload = {
-        username,
-        password,
-      };
+      const isSuccess = await signIn(username, password);
 
-      const response = await axios.post(
-        `${config.apiUrl}/api/user/signin`,
-        payload
-      );
-      
-      if (response.data.token !== undefined) {
-        localStorage.setItem(config.tokenKey, response.data.token);
-        localStorage.setItem('bun_service_name', response.data.user.username);
-        localStorage.setItem('bun_service_level', response.data.user.level);
-        
+      if (isSuccess) {
         router.push("/backoffice/dashboard");
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'error',
-          text: 'Invalid username or password',
+          icon: "error",
+          title: "error",
+          text: "Invalid username or password",
           iconColor: "red",
           background: "#1f2937",
           color: "#9ca3af",
@@ -77,6 +115,11 @@ export default function Home() {
         <h1 className="text-2xl font-bold mb-4 text-white">
           <div>เข้าสู่ระบบ</div>
         </h1>
+        {isAutoLoggingIn && (
+          <div className="mt-4 rounded-lg border border-gray-600 bg-gray-700 p-3 text-sm text-gray-200">
+            กำลังเข้าสู่ระบบ demo อัตโนมัติ...
+          </div>
+        )}
         <form
           className="flex flex-col gap-2 mt-10 w-full"
           onSubmit={handleSubmit}
