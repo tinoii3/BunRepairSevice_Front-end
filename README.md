@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Bun Repair Service (Front-end)
 
-## Getting Started
+Front-end web app for a repair-service backoffice (login + dashboard and management pages). Built with Next.js App Router and a REST API integration.
 
-First, run the development server:
+### Features
+
+- **Authentication UI**: Login page at `/` that stores a token in `localStorage`
+- **Backoffice pages**: `/backoffice/dashboard` plus pages for users, devices, company info, repair records/status, profile, and reports
+- **Charts & reports**: ApexCharts + Day.js for reporting views
+- **Modern styling**: Tailwind CSS + responsive layout (TopNav + Sidebar)
+
+### Tech stack
+
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **UI**: React + Tailwind CSS
+- **HTTP**: Axios
+- **UX dialogs**: SweetAlert2
+- **Charts**: ApexCharts
+
+### Requirements
+
+- **Node.js**: LTS recommended (or Bun if you prefer)
+- **API server**: By default the UI calls `http://localhost:3001` (see `app/config.ts`)
+
+### Getting started
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project currently keeps its API base URL in code:
 
-## Learn More
+- **API base URL**: `app/config.ts` → `config.apiUrl` (default: `http://localhost:3001`)
+- **Token storage key**: `app/config.ts` → `config.tokenKey`
 
-To learn more about Next.js, take a look at the following resources:
+If you deploy to another environment, update `config.apiUrl` to point to your API host.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Available scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev     # start Next.js in dev mode
+npm run build   # production build
+npm run start   # start production server
+npm run lint    # run ESLint
+```
 
-## Deploy on Vercel
+### Project structure (high level)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **`app/`**: Next.js App Router routes, layouts, and global styles
+  - **`app/page.tsx`**: Login page
+  - **`app/backoffice/`**: Backoffice area (layout + pages)
+  - **`app/components/`**: Shared UI components (TopNav, Sidebar, Modal)
+- **`public/`**: Static assets
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Contributing / best practices
+
+- **Code style**: TypeScript strict mode is enabled (`tsconfig.json`). Keep components typed and avoid `any` where possible.
+- **Linting**: Run `npm run lint` before opening a PR.
+- **Secrets**: Do not commit `.env*` files with real secrets (prefer `.env.example` if you add env vars later).
+
+### Deployment
+
+Standard Next.js deployment works (Vercel, Docker, Node server, etc.):
+
+```bash
+npm run build
+npm run start
+```
+
+Make sure `config.apiUrl` points to the correct API base URL for that environment.
