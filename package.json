@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --no-lint",
     "start": "next start",
     "lint": "next lint"
   },
@@ -13,7 +13,7 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "my-app": "file:",
-    "next": "15.1.4",
+    "next": "^16.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sweetalert2": "^11.15.2"
