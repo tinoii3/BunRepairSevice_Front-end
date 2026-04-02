@@ -47,8 +47,11 @@ Open `http://localhost:3000`.
   - **`app/components/`**: Shared UI components (TopNav, Sidebar, Modal)
 - **`public/`**: Static assets
 
-### Demo Access user for login
-username: users
-password: users
+### Demo access (login)
+
+| Field    | Value   |
+| -------- | ------- |
+| username | `admin` |
+| password | `admin` |
 
 **don't worry when you delete data it not have problem becuz i make soft delete**
